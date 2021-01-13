@@ -6,10 +6,11 @@
     "scripts": {
         "test": "nyc mocha",
         "init:env": "export $(cat .env | xargs)",
+        "test:helm": "helm lint helm/",
         "release:docker": "docker push ghcr.io/klcodanr/roman-numeral:${VERSION:-latest}",
         "build:docker": "docker build -t ghcr.io/klcodanr/roman-numeral:${VERSION:-latest} .",
         "run:node": "node src/server.js",
-        "run:docker": "docker run --publish 8080:8080 --env AIRBRAKE_PROJECT_ID=${AIRBRAKE_PROJECT_ID} --env AIRBRAKE_PROJECT_KEY=${AIRBRAKE_PROJECT_KEY} --env AIRBRAKE_ENVIRONMENT=${AIRBRAKE_ENVIRONMENT} ghcr.io/klcodanr/roman-numeral"
+        "deploy:helm": "helm ${HELM_ACTION:-upgrade} ${HELM_NAME} --version=${VERSION} --set-string AIRBRAKE_PROJECT_ID=${AIRBRAKE_PROJECT_ID} --set-string AIRBRAKE_PROJECT_KEY=${AIRBRAKE_PROJECT_KEY} --set-string AIRBRAKE_ENVIRONMENT=${AIRBRAKE_ENVIRONMENT} . --set-string image.tag=${VERSION}"
     },
     "author": "Dan Klco",
     "license": "ISC",
