@@ -1,5 +1,8 @@
 FROM node:14
 
+# Link the image back to the GitHub repo
+LABEL org.opencontainers.image.source https://github.com/klcodanr/roman-numeral
+
 WORKDIR /usr/src/app
 
 # Create a layer for the node dependencies
