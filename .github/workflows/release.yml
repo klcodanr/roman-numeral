@@ -1,0 +1,36 @@
+name: "Release"
+on:
+  workflow_dispatch:
+    inputs:
+      version:
+        description: "Version Number"
+        required: true
+jobs:
+  tag-node:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v1
+        with:
+          token: ${{ secrets.GH_PAT }}
+      - run: npm ci
+      - run: npm test
+        env:
+          AIRBRAKE_PROJECT_ID: ${{secrets.AIRBRAKE_PROJECT_ID}}
+          AIRBRAKE_PROJECT_KEY: ${{secrets.AIRBRAKE_PROJECT_KEY}}
+          AIRBRAKE_ENVIRONMENT: ${{secrets.AIRBRAKE_ENVIRONMENT}}
+      - run: npm version ${{inputs.version}}
+      - run: git config --local user.email "action@github.com" && git config --local user.name "GitHub Action"
+      - run: git tag -a ${{inputs.version}} -m "Releasing ${{inputs.version}}"
+      - run: git push --all
+  release-docker:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v1
+      - run: npm ci
+      - run: npm run build:docker
+        env:
+          VERSION: ${{inputs.version}}
+      - run: echo ${{ secrets.GH_PAT }} | docker login ghcr.io -u $GITHUB_ACTOR --password-stdin
+      - run: npm run release:docker
+        env:
+          VERSION: ${{inputs.version}}
