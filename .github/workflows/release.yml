@@ -12,20 +12,31 @@ jobs:
       - uses: actions/checkout@v1
         with:
           token: ${{ secrets.GH_PAT }}
-      - run: npm ci
-      - run: npm test
+      - name: Install NodeJS dependencies
+        run: npm ci
+      - name: NodeJS Tests
+        run: npm test
         env:
           AIRBRAKE_PROJECT_ID: ${{secrets.AIRBRAKE_PROJECT_ID}}
           AIRBRAKE_PROJECT_KEY: ${{secrets.AIRBRAKE_PROJECT_KEY}}
           AIRBRAKE_ENVIRONMENT: ${{secrets.AIRBRAKE_ENVIRONMENT}}
-      - run: git config --local user.email "action@github.com" && git config --local user.name "GitHub Action"
-      - run: npm version ${{ github.event.inputs.version }}
-      - run: git tag -a ${{ github.event.inputs.version }} -m "Releasing ${{ github.event.inputs.version }}"
-      - run: git push --all
-      - run: npm run build:docker
+      - name: Configuring GIT
+        run: git config --local user.email "action@github.com" && git config --local user.name "GitHub Action"
+      - name: Add GIT origin
+        run: git remote add gh-origin https://${{GITHUB_ACTOR}}:${{ secrets.GH_PAT }}@github.com/roman-numeral.git​
+      - name: Updating node package version
+        run: npm version ${{ github.event.inputs.version }}
+      - name: Tagging release in GIT
+        run: git tag -a ${{ github.event.inputs.version }} -m "Releasing ${{ github.event.inputs.version }}"
+      - name: Push tag and main
+        run: git push gh-origin HEAD:main --tags
+      - name: Docker build
+        run: npm run build:docker
         env:
           VERSION: ${{ github.event.inputs.version }}
-      - run: echo ${{ secrets.GH_PAT }} | docker login ghcr.io -u $GITHUB_ACTOR --password-stdin
-      - run: npm run release:docker
+      - name: Login to Github Container Registry
+        run: echo ${{ secrets.GH_PAT }} | docker login ghcr.io -u $GITHUB_ACTOR --password-stdin
+      - name: Push release to Github Container Registry
+        run: npm run release:docker
         env:
           VERSION: ${{ github.event.inputs.version }}
