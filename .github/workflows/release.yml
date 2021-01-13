@@ -23,7 +23,7 @@ jobs:
       - name: Configuring GIT
         run: git config --local user.email "action@github.com" && git config --local user.name "GitHub Action"
       - name: Add GIT origin
-        run: git remote add gh-origin https://${{GITHUB_ACTOR}}:${{ secrets.GH_PAT }}@github.com/roman-numeral.git​
+        run: git remote add gh-origin https://${GITHUB_ACTOR}:${{ secrets.GH_PAT }}@github.com/roman-numeral.git​
       - name: Updating node package version
         run: npm version ${{ github.event.inputs.version }}
       - name: Tagging release in GIT
