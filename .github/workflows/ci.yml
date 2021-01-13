@@ -1,5 +1,4 @@
-name: "Tests"
-
+name: "Continuous Integration"
 on:
   pull_request:
   push:
@@ -12,6 +11,10 @@ jobs:
       - uses: actions/checkout@v1
       - run: npm ci
       - run: npm test
+        env:
+          AIRBRAKE_PROJECT_ID: ${{secrets.AIRBRAKE_PROJECT_ID}}
+          AIRBRAKE_PROJECT_KEY: ${{secrets.AIRBRAKE_PROJECT_KEY}}
+          AIRBRAKE_ENVIRONMENT: ${{secrets.AIRBRAKE_ENVIRONMENT}}
   build-docker:
     runs-on: ubuntu-latest
     steps:
