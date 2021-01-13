@@ -1,6 +1,6 @@
 {
     "name": "roman-numeral",
-    "version": "1.0.2",
+    "version": "1.0.4",
     "description": "A web service for converting arabic numerals to roman numerals",
     "main": "src/server.js",
     "scripts": {
