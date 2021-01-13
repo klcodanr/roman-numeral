@@ -29,8 +29,8 @@ jobs:
       - name: Tagging release ${VERSION}
         run: |
           npm version ${VERSION}
-          git config user.name "Github Actions"
-          git config user.email github-actions@github.com
+          git config --global user.name "Github Actions"
+          git config --global user.email github-actions@github.com
           git push origin HEAD:main --tags
         env:
           VERSION: ${{ github.event.inputs.version }}
