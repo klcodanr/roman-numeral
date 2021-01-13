@@ -18,6 +18,8 @@ Each number could be then resolved by first splitting the number into it's consi
     1258 -> [0][1], [1][2] , [2][5], [3][8]]
     -> M CC L VIII
     -> MCCLVIII
+    
+Preference was to validate parameters to ensure they were valid versus handling with exceptions. Only integers between 1-3999 are allowed to be provided.
 
 ### Limitations
 
@@ -119,11 +121,22 @@ To validate the Helm chart, run:
 
 `npm run test:helm`
 
+## Continuous Integration
+
+Github Actions are used to build, release and deploy code to the environments. There are three actions:
+
+ - [.github/workflows/ci.yml](.github/workflows/ci.yml) - Build and test the code on pull request and commit to `main`
+ - [.github/workflows/release.yml](.github/workflows/release.yml) - Release the docker image to Github Container Registry
+ - [.github/workflows/deploy.yml](.github/workflows/deploy.yml) - Deploy the helm chart to the selected environment
+ 
+
 ## Production Deployment
 
 The application is running in DigitalOcean at https://roman-numeral.danklco.com/romannumeral?query=23 inside a Kubernetes cluster with the following architecture:
 
 ![Architecture](./docs/Architecture.png)
+
+The deplo
 
 ## Metrics
 
