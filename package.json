@@ -7,7 +7,7 @@
         "test": "nyc mocha",
         "init:env": "export $(cat .env | xargs)",
         "release:docker": "docker push ghcr.io/klcodanr/roman-numeral:${VERSION:-latest}",
-        "build:docker": "docker build -t ghcr.io/klcodanr/roman-numeral .",
+        "build:docker": "docker build -t ghcr.io/klcodanr/roman-numeral:${VERSION:-latest} .",
         "run:node": "node src/server.js",
         "run:docker": "docker run --publish 8080:8080 --env AIRBRAKE_PROJECT_ID=${AIRBRAKE_PROJECT_ID} --env AIRBRAKE_PROJECT_KEY=${AIRBRAKE_PROJECT_KEY} --env AIRBRAKE_ENVIRONMENT=${AIRBRAKE_ENVIRONMENT} ghcr.io/klcodanr/roman-numeral"
     },
