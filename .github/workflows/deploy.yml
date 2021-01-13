@@ -29,7 +29,7 @@ jobs:
           AIRBRAKE_ENVIRONMENT: ${{ github.event.inputs.environment }}
           HELM_NAME: ${{ github.event.inputs.environment }}
       - name: Airbrake Deploy Push
-        uses: actions/airbrake-deploy-github-action@v1
+        uses: mtchavez/airbrake-deploy@v1
         with:
           project-id: ${{ secrets.AIRBRAKE_PROJECT_ID }}
           project-key: ${{ secrets.AIRBRAKE_PROJECT_KEY }}
