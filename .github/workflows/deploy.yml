@@ -9,7 +9,7 @@ on:
         description: "Environment"
         required: true
 jobs:
-  helm-upgrade:
+  helm:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v1
@@ -21,7 +21,7 @@ jobs:
           personalAccessToken: ${{ secrets.DIGITALOCEAN_ACCESS_TOKEN }}
           clusterName: roman-numeral
       - name: Deploy Helm Chart
-        run: npm run deploy:helm
+        run: helm upgrade ${HELM_NAME} --version=${VERSION} --set-string AIRBRAKE_PROJECT_ID=${AIRBRAKE_PROJECT_ID} --set-string AIRBRAKE_PROJECT_KEY=${AIRBRAKE_PROJECT_KEY} --set-string AIRBRAKE_ENVIRONMENT=${AIRBRAKE_ENVIRONMENT} --set-string image.tag=${VERSION} ./helm
         env:
           VERSION: ${{ github.event.inputs.version }}
           AIRBRAKE_PROJECT_ID: ${{secrets.AIRBRAKE_PROJECT_ID}}
