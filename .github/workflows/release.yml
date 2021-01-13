@@ -31,6 +31,7 @@ jobs:
           git config user.name "Github Actions"
           git config user.email github-actions@github.com
           npm version ${VERSION}
+          git push origin main
           git push origin HEAD:main --tags
         env:
           VERSION: ${{ github.event.inputs.version }}
@@ -40,6 +41,8 @@ jobs:
     needs: version
     steps:
       - uses: actions/checkout@v1
+        with:
+          ref: tags/v${{ github.event.inputs.version }}
       - name: Docker build
         run: npm run build:docker
         env:

@@ -1,7 +1,7 @@
 const chai = require("chai");
 const chaiHttp = require("chai-http");
 const getPort = require("get-port");
-const server = require("../src/server");
+let server = null;
 const should = chai.should();
 
 chai.use(chaiHttp);
@@ -9,6 +9,7 @@ chai.use(chaiHttp);
 describe("Server", () => {
   before(async function () {
     process.env.SERVER_PORT = await getPort();
+    server = require("../src/server");
   });
   describe("/GET not found", () => {
     it("it should GET a 404 on not defined addresses", (done) => {

@@ -8,16 +8,20 @@ const romannumeral = require("./romannumeral");
 
 require("dotenv").config();
 
-
-const airbrake = new Airbrake.Notifier({
-    projectId: process.env.AIRBRAKE_PROJECT_ID,
-    projectKey: process.env.AIRBRAKE_PROJECT_KEY,
-    environment: process.env.AIRBRAKE_PROJECT_ENVIRONMENT,
-  });
+const useAirbrake =
+  process.env.AIRBRAKE_PROJECT_ID && process.env.AIRBRAKE_PROJECT_KEY;
 
 const app = express();
+let airbrake = null;
 app.use(helmet());
-app.use(airbrakeExpress.makeMiddleware(airbrake));
+if (useAirbrake) {
+  airbrake = new Airbrake.Notifier({
+    projectId: process.env.AIRBRAKE_PROJECT_ID,
+    projectKey: process.env.AIRBRAKE_PROJECT_KEY,
+    environment: process.env.AIRBRAKE_PROJECT_ENVIRONMENT || "Local",
+  });
+  app.use(airbrakeExpress.makeMiddleware(airbrake));
+}
 
 app.get("/romannumeral", (request, response) => {
   const num = request.query["query"];
@@ -41,7 +45,9 @@ app.get("/romannumeral", (request, response) => {
   }
 });
 
-app.use(airbrakeExpress.makeErrorHandler(airbrake));
+if (useAirbrake) {
+  app.use(airbrakeExpress.makeErrorHandler(airbrake));
+}
 const server = app.listen(port, () => {
   logger.info(`Example app listening at http://localhost:${port}/romannumeral`);
 });
