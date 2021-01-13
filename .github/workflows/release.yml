@@ -6,7 +6,7 @@ on:
         description: "Version Number"
         required: true
 jobs:
-  tag-node:
+  release:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v1
@@ -18,8 +18,8 @@ jobs:
           AIRBRAKE_PROJECT_ID: ${{secrets.AIRBRAKE_PROJECT_ID}}
           AIRBRAKE_PROJECT_KEY: ${{secrets.AIRBRAKE_PROJECT_KEY}}
           AIRBRAKE_ENVIRONMENT: ${{secrets.AIRBRAKE_ENVIRONMENT}}
-      - run: npm version ${{ github.event.inputs.version }}
       - run: git config --local user.email "action@github.com" && git config --local user.name "GitHub Action"
+      - run: npm version ${{ github.event.inputs.version }}
       - run: git tag -a ${{ github.event.inputs.version }} -m "Releasing ${{ github.event.inputs.version }}"
       - run: git push --all
       - run: npm run build:docker
