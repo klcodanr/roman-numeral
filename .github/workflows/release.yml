@@ -18,19 +18,14 @@ jobs:
           AIRBRAKE_PROJECT_ID: ${{secrets.AIRBRAKE_PROJECT_ID}}
           AIRBRAKE_PROJECT_KEY: ${{secrets.AIRBRAKE_PROJECT_KEY}}
           AIRBRAKE_ENVIRONMENT: ${{secrets.AIRBRAKE_ENVIRONMENT}}
-      - run: npm version ${{inputs.version}}
+      - run: npm version ${{ github.event.inputs.version }}
       - run: git config --local user.email "action@github.com" && git config --local user.name "GitHub Action"
-      - run: git tag -a ${{inputs.version}} -m "Releasing ${{inputs.version}}"
+      - run: git tag -a ${{ github.event.inputs.version }} -m "Releasing ${{ github.event.inputs.version }}"
       - run: git push --all
-  release-docker:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v1
-      - run: npm ci
       - run: npm run build:docker
         env:
-          VERSION: ${{inputs.version}}
+          VERSION: ${{ github.event.inputs.version }}
       - run: echo ${{ secrets.GH_PAT }} | docker login ghcr.io -u $GITHUB_ACTOR --password-stdin
       - run: npm run release:docker
         env:
-          VERSION: ${{inputs.version}}
+          VERSION: ${{ github.event.inputs.version }}
