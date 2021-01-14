@@ -59,8 +59,6 @@ To build and run the NodeJS base of the project run the following commands from 
 
 This will start a server on the port 8080 which should respond to the following request: http://localhost:8080/romannumeral?query=3
 
-Note: for instrumentation see [Metrics](#metrics)
-
 ### Docker Local Build / Run
 
 There are shortcuts to build and run the Docker container, to build / run the container:
@@ -125,7 +123,7 @@ To validate the Helm chart, run:
 
 Github Actions are used to build, release and deploy code to the environments. There are three actions:
 
- - [.github/workflows/ci.yml](.github/workflows/ci.yml) - Build and test the code on pull request and commit to `main`
+ - [.github/workflows/ci.yml](.github/workflows/ci.yml) - Automatically build and test the code on pull request or commit to `main`
  - [.github/workflows/release.yml](.github/workflows/release.yml) - Release the docker image to Github Container Registry
  - [.github/workflows/deploy.yml](.github/workflows/deploy.yml) - Deploy the helm chart to the selected environment
  
@@ -140,13 +138,15 @@ The application is fronted by CloudFlare providing a CDN / DNS and then a nginx-
 
 ## Metrics
 
-Metrics are tracked via [Airbrake](https://airbrake.io/) for all level monitoring. To configure Airbrake monitoring specify the following environment variables:
+Metrics are tracked via [Airbrake](https://airbrake.io/) for consistent monitoring of application logs and performance.
+
+![Airbrake](./docs/Airbrake.png)
+
+To configure Airbrake monitoring specify the following environment variables:
 
 - AIRBRAKE_PROJECT_ID
 - AIRBRAKE_PROJECT_KEY
 - AIRBRAKE_ENVIRONMENT
-
-
 
 The NodeJS tests will load this automatically from a .env file, in addition to expose those variables at build time run: `npm run init:env`
 
