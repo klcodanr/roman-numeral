@@ -19,11 +19,11 @@ Each number could be then resolved by first splitting the number into it's consi
     -> M CC L VIII
     -> MCCLVIII
     
-Preference was to validate parameters to ensure they were valid versus handling with exceptions. Only integers between 1-3999 are allowed to be provided.
+My preference was to validate parameters to ensure they were valid versus handling with exceptions. Only integers between 1-3999 are allowed to be provided.
 
 ### Limitations
 
-The implementation only supports positive whole numbers between 1-3999. Theoretically larger numbers could be supported by updating the [./src/numerals.json](./src/numerals.json) and [./src/romannumeral.js](./src/romannumeral.js) to map larger values, but this was not in the scope of requirements for this project.
+The implementation only supports positive whole numbers in decimal format between 1-3999. Theoretically larger numbers could be supported by updating the [./src/numerals.json](./src/numerals.json) and [./src/romannumeral.js](./src/romannumeral.js) to map larger values, but this was not in the scope of requirements for this project.
 
 ### Project Structure
 
@@ -57,11 +57,11 @@ To build and run the NodeJS base of the project run the following commands from 
  1. `npm install`
  2. `node .`
 
-This will start a server on the port 8080 which should respond to the following request: http://localhost:8080/romannumeral?query=3
+This will start a server on the port 8080 which will respond to requests in the following format: http://localhost:8080/romannumeral?query=3
 
 ### Docker Local Build / Run
 
-There are shortcuts to build and run the Docker container, to build / run the container:
+In addition to running the NodeJS app you can run via a Docker container:
 
  - Set up the [metrics configuration](#metrics)
  - Ensure port 8080 is unassigned
@@ -70,7 +70,7 @@ There are shortcuts to build and run the Docker container, to build / run the co
  - Run: `npm run run:docker`
  - Run `docker-machine ip`
 
-Once all the steps are complete, the service can be accessed at:
+Which can be accessed at:
 http://localhost:8080/romannumeral?query=23
 
 ### Helm / Kubernetes Local Build and Run
