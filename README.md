@@ -121,9 +121,13 @@ To validate the Helm chart, run:
 
 ## Production Deployment
 
-The application is running in DigitalOcean at https://roman-numeral.danklco.com/romannumeral?query=23 inside a Kubernetes cluster with the following architecture:
+The application is running at https://roman-numeral.danklco.com/romannumeral?query=23 inside a DigitalOcean Kubernetes cluster with the following architecture:
 
 ![Architecture](./docs/Architecture.png)
+
+The application is fronted by CloudFlare providing a CDN / DNS and then a nginx-based LoadBalancer required by DigitalOcean to open their Kubernetes clusters to the internet.
+
+The production deployment process is run through the 
 
 ## Metrics
 
@@ -132,6 +136,8 @@ Metrics are tracked via [Airbrake](https://airbrake.io/) for all level monitorin
 - AIRBRAKE_PROJECT_ID
 - AIRBRAKE_PROJECT_KEY
 - AIRBRAKE_ENVIRONMENT
+
+
 
 The NodeJS tests will load this automatically from a .env file, in addition to expose those variables at build time run: `npm run init:env`
 
