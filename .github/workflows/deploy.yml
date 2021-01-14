@@ -8,6 +8,10 @@ on:
       environment:
         description: "Environment"
         required: true
+      action:
+        description: "Action"
+        required: true
+        default: upgrade
 jobs:
   helm:
     runs-on: ubuntu-latest
@@ -21,13 +25,14 @@ jobs:
           personalAccessToken: ${{ secrets.DIGITALOCEAN_ACCESS_TOKEN }}
           clusterName: roman-numeral
       - name: Deploy Helm Chart
-        run: helm upgrade ${HELM_NAME} --version=${VERSION} --set-string AIRBRAKE_PROJECT_ID=${AIRBRAKE_PROJECT_ID} --set-string AIRBRAKE_PROJECT_KEY=${AIRBRAKE_PROJECT_KEY} --set-string AIRBRAKE_ENVIRONMENT=${AIRBRAKE_ENVIRONMENT} --set-string image.tag=${VERSION} ./helm
+        run: helm ${HELM_ACTION} ${HELM_NAME} --version=${VERSION} --set-string AIRBRAKE_PROJECT_ID=${AIRBRAKE_PROJECT_ID} --set-string AIRBRAKE_PROJECT_KEY=${AIRBRAKE_PROJECT_KEY} --set-string AIRBRAKE_ENVIRONMENT=${AIRBRAKE_ENVIRONMENT} --set-string image.tag=${VERSION} ./helm
         env:
           VERSION: ${{ github.event.inputs.version }}
           AIRBRAKE_PROJECT_ID: ${{secrets.AIRBRAKE_PROJECT_ID}}
           AIRBRAKE_PROJECT_KEY: ${{secrets.AIRBRAKE_PROJECT_KEY}}
           AIRBRAKE_ENVIRONMENT: ${{ github.event.inputs.environment }}
           HELM_NAME: ${{ github.event.inputs.environment }}
+          HELM_ACTION: ${{ github.event.inputs.action }}
       - name: Airbrake Deploy Push
         uses: mtchavez/airbrake-deploy@v1
         with:
