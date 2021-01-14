@@ -19,7 +19,7 @@ Each number could be then resolved by first splitting the number into it's consi
     -> M CC L VIII
     -> MCCLVIII
     
-My preference was to validate parameters to ensure they were valid versus handling with exceptions. Only integers between 1-3999 are allowed to be provided.
+For simplicty's sake in supporting unknown size numbers, the implementation reverses the order of the digits, having ones take the 0'th index and thousands take the third. My preference was to validate parameters to ensure they were valid versus handling with exceptions. Only whole, base10 numbers between 1-3999 are allowed to be provided.
 
 ### Limitations
 
@@ -40,17 +40,17 @@ Running this project requires the following dependencies to be pre-installed:
 
  - NodeJS 14+
  - NPM 6+
+
+Optional, for local Docker / Kubernetes testing:
+
  - Docker 20+
  - Kubernetes 1.19+
  - Helm 3
-
-Optional, for local Kubernetes testing:
-
  - Minikube 1.15+
 
 ## Build and Run
  
-### NodeJS Local Build / Run
+### Local Build / Run
 
 To build and run the NodeJS base of the project run the following commands from the project directory:
 
@@ -63,12 +63,10 @@ This will start a server on the port 8080 which will respond to requests in the 
 
 In addition to running the NodeJS app you can run via a Docker container:
 
- - Set up the [metrics configuration](#metrics)
  - Ensure port 8080 is unassigned
  - Run: `npm run init:env`
  - Run: `npm run build:docker`
  - Run: `npm run run:docker`
- - Run `docker-machine ip`
 
 Which can be accessed at:
 http://localhost:8080/romannumeral?query=23
@@ -148,7 +146,7 @@ To configure Airbrake monitoring specify the following environment variables:
 - AIRBRAKE_PROJECT_KEY
 - AIRBRAKE_ENVIRONMENT
 
-The NodeJS tests will load this automatically from a .env file, in addition to expose those variables at build time run: `npm run init:env`
+These are provided in GitHub Actions build time via Secrets. The server will load these values automatically from a .env file, in addition to expose those variables at build time (for the Docker container) run: `npm run init:env`
 
 ## Dependencies
 
@@ -173,6 +171,6 @@ In addition to the prerequisite software, the following dependencies are used by
 ### Build Dependencies
 
  - actions/checkout@v2 - checkout Git code
- - actions/airbrake-deploy-github-action@v1 - report a deployment to airbrake
+ - mtchavez/airbrake-deploy@v1 - report a deployment to airbrake
  - matootie/dokube@v1.3.4 - authenticate with Digital Ocean Kubernetes
  - SonarCloud - code quality / static code analysis
