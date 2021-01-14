@@ -9,22 +9,28 @@ const logger = require("./logger");
  */
 function convert(num) {
   logger.debug(`Converting '${num}' to roman numeral`);
-  let integer = getInteger(num);
+  const integer = getInteger(num);
 
-  // break down the number by decimal places
-  const thousands = parseInt(integer / 1000, 10);
-  integer = integer - thousands * 1000;
-  const hundreds = parseInt(integer / 100, 10);
-  integer = integer - hundreds * 100;
-  const tens = parseInt(integer / 10, 10);
-  const ones = integer - tens * 10;
+  /*
+   break down the number into digits and reverse so 0 = ones, 
+   1 = 10's, 2 = 100's and 3 = 1000's
+   */
+  const roman = numerals.mapping;
+  const digits = [...integer.toString()].reverse();
+
+  /*
+   retrieve the appropriate mapping from the table, using 0 if no 
+   value for a digit
+   */
+  const thousands = roman[3][digits[3] || 0];
+  const hundreds = roman[2][digits[2] || 0];
+  const tens = roman[1][digits[1] || 0];
+  const ones = roman[0][digits[0]];
   logger.debug(
     `Loaded: \n\tThousands: ${thousands}\n\tHundreds: ${hundreds}\n\tTens: ${tens}\n\tOnes: ${ones}`
   );
 
-  // map the decimal values into the appropriate roman numeral
-  const map = numerals.mapping;
-  return `${map[0][thousands]}${map[1][hundreds]}${map[2][tens]}${map[3][ones]}`;
+  return `${thousands}${hundreds}${tens}${ones}`;
 }
 
 /**
@@ -36,6 +42,7 @@ function getInteger(num) {
   if (Number.isInteger(num)) {
     return num;
   }
+  // being really strict here about the values given as strings, must be a whole, decimal number
   if (typeof num === "string" && /^[1-9]\d*$/.test(num.trim())) {
     return parseInt(num.trim(), 10);
   }
