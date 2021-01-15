@@ -15,11 +15,11 @@ The implementation of the actual conversion is based on readability and simplici
 
 Each number could be then resolved by first splitting the number into it's consitutent digits and then looking up the matching value in the table. For example would be a combination of the characters found at:
 
-    1258 -> [0][1], [1][2] , [2][5], [3][8]]
+    1258 -> [0][1], [1][2] , [2][5], [3][8]
     -> M CC L VIII
     -> MCCLVIII
     
-For simplicty's sake in supporting unknown size numbers, the implementation reverses the order of the digits, having ones take the 0'th index and thousands take the third. My preference was to validate parameters to ensure they were valid versus handling with exceptions. Only whole, base10 numbers between 1-3999 are allowed to be provided.
+For simplicty's sake in supporting unknown size numbers, the implementation reverses the order of the digits, having ones take the 0'th index and thousands take the third. My preference was to validate parameters to ensure they were valid versus handling with exceptions. Only whole, base10 numbers between 1-3999 are allowed to be provided, all other parameters will return a 400 response.
 
 ### Limitations
 
@@ -157,7 +157,7 @@ In addition to the prerequisite software, the following dependencies are used by
 - @airbrake/node - instrumentation and metrics client
 - dotenv - load environment properties from .env to ease running locally
 - express - httpd server for NodeJS
-- helmet - hardening for express services,
+- helmet - hardening for express services
 - winston - logging framework for NodeJS
 
 ### Testing Dependencies
